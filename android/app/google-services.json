@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "272680361705",
+    "project_id": "event-app-sat-c16",
+    "storage_bucket": "event-app-sat-c16.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272680361705:android:91c8392124bb9d98f89a78",
+        "android_client_info": {
+          "package_name": "com.example.event_app_c16_sat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqUbLsHxmgHZEwVdRlGUN0tRhswUrFmI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
