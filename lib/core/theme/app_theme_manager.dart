@@ -65,5 +65,48 @@ abstract class AppThemeManager {
   );
   static ThemeData darkTheme = ThemeData(
     scaffoldBackgroundColor: ColorPallete.darkScaffoldBackgroundColor,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: ColorPallete.darkScaffoldBackgroundColor,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Colors.white,
+    ),
+    textTheme: TextTheme(
+      headlineSmall: TextStyle(
+        fontFamily: FontFamily.inter,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+      titleLarge: TextStyle(
+        fontFamily: FontFamily.inter,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+      titleMedium: TextStyle(
+        fontFamily: FontFamily.inter,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+      titleSmall: TextStyle(
+        fontFamily: FontFamily.inter,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+      bodyLarge: TextStyle(
+        fontFamily: FontFamily.inter,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+      bodyMedium: TextStyle(
+        fontFamily: FontFamily.inter,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+      bodySmall: TextStyle(
+        fontFamily: FontFamily.inter,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+    ),
   );
 }

@@ -21,7 +21,48 @@ class FirestoreServices {
     return docRef.set(eventData);
   }
 
-  getAllEvents() {
-    FirebaseFirestore.instance.collection(collectionName);
+  static Future<List<EventData>> getAllEvents() async {
+    var collectionRef = getCollectionRef();
+    var data = await collectionRef.get();
+
+    return data.docs.map((element) {
+      return element.data();
+    }).toList();
+    // var dataList = data.docs;
+    //
+    // List<EventData> eventsList = [];
+    // for (var element in dataList) {
+    //   eventsList.add(element.data());
+    // }
+    //
+    // return eventsList;
+  }
+
+  static Stream<QuerySnapshot<EventData>> getStreamOfEvents(String categoryID) {
+    var collectionRef = getCollectionRef().where(
+      "categoryID",
+      isEqualTo: categoryID,
+    );
+    return collectionRef.snapshots();
+  }
+
+  static Stream<QuerySnapshot<EventData>> getStreamOfFavoritesEvents() {
+    var collectionRef = getCollectionRef().where("isFavorite", isEqualTo: true);
+    return collectionRef.snapshots();
+  }
+
+  static Future<void> updateEvent(EventData eventData) {
+    var collectionRef = getCollectionRef();
+    var docRef = collectionRef.doc(eventData.eventID);
+
+    return docRef.update(eventData.toFirestore());
+  }
+
+
+  static Future<void> deleteEvent(EventData eventData) {
+    var collectionRef = getCollectionRef();
+    var docRef = collectionRef.doc(eventData.eventID);
+
+    return docRef.delete();
   }
 }

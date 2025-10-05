@@ -8,6 +8,8 @@ import 'package:event_app_c16_sat/modules/layout/pages/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class LayoutView extends StatefulWidget {
   const LayoutView({super.key});
 
@@ -16,6 +18,7 @@ class LayoutView extends StatefulWidget {
 }
 
 class _LayoutViewState extends State<LayoutView> {
+
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
@@ -27,6 +30,7 @@ class _LayoutViewState extends State<LayoutView> {
 
   @override
   Widget build(BuildContext context) {
+    var local = AppLocalizations.of(context)!;
     return Scaffold(
       floatingActionButton: Bounceable(
         onTap: () {
@@ -55,22 +59,22 @@ class _LayoutViewState extends State<LayoutView> {
           BottomNavigationBarItem(
             icon: Assets.icons.homeIcn.image(height: 26),
             activeIcon: Assets.icons.selectedHomeIcn.image(height: 26),
-            label: "Home",
+            label: local.home,
           ),
           BottomNavigationBarItem(
             icon: Assets.icons.mapIcn.image(height: 26),
             activeIcon: Assets.icons.selectedMapIcn.image(height: 26),
-            label: "Maps",
+            label: local.maps,
           ),
           BottomNavigationBarItem(
             icon: Assets.icons.favoriteIcn.image(height: 26),
             activeIcon: Assets.icons.selectedFavoriteIcn.image(height: 26),
-            label: "Favorites",
+            label: local.favorites,
           ),
           BottomNavigationBarItem(
             icon: Assets.icons.userIcn.image(height: 26),
             activeIcon: Assets.icons.selectedUserIcn.image(height: 26),
-            label: "Profile",
+            label: local.profile,
           ),
         ],
       ),

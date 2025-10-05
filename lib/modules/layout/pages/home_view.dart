@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_app_c16_sat/core/theme/color_pallete.dart';
+import 'package:event_app_c16_sat/core/utils/firestore_serivces.dart';
 import 'package:event_app_c16_sat/gen/assets.gen.dart';
 import 'package:event_app_c16_sat/models/category_data.dart';
+import 'package:event_app_c16_sat/models/event_data.dart';
 import 'package:event_app_c16_sat/modules/layout/widgets/category_item.dart';
 import 'package:event_app_c16_sat/modules/layout/widgets/tab_bar_item.dart';
 import 'package:flutter/material.dart';
@@ -177,18 +180,79 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            itemBuilder: (context, index) {
-              return CategoryItem(categoryData: categories[index]);
+          StreamBuilder(
+            stream: FirestoreServices.getStreamOfEvents(
+              categories[_currentIndex].id,
+            ),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: ColorPallete.primaryColor,
+                  ),
+                );
+              }
+              List<EventData> eventsList =
+                  snapshot.data!.docs.map((element) {
+                    return element.data();
+                  }).toList();
+
+              return eventsList.isEmpty
+                  ? Center(
+                    child: Text(
+                      "No events Founds",
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                  : ListView.separated(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    itemBuilder: (context, index) {
+                      return CategoryItem(eventData: eventsList[index]);
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(height: 10);
+                    },
+                    itemCount: eventsList.length,
+                  );
             },
-            separatorBuilder: (context, index) {
-              return SizedBox(height: 10);
-            },
-            itemCount: categories.length,
           ),
+
+          /*FutureBuilder<List<EventData>>(
+            future: FirestoreServices.getAllEvents(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: ColorPallete.primaryColor,
+                  ),
+                );
+              }
+
+              List<EventData> eventList = snapshot.data ?? [];
+              return   ListView.separated(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                itemBuilder: (context, index) {
+                  return CategoryItem(eventData: eventList[index]);
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 10);
+                },
+                itemCount: eventList.length,
+              );
+            },
+          ),*/
         ],
       ),
     );

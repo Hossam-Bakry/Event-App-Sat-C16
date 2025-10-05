@@ -1,12 +1,17 @@
 import 'package:event_app_c16_sat/core/theme/color_pallete.dart';
+import 'package:event_app_c16_sat/core/utils/firestore_serivces.dart';
 import 'package:event_app_c16_sat/gen/assets.gen.dart';
 import 'package:event_app_c16_sat/models/category_data.dart';
+import 'package:event_app_c16_sat/models/event_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bounceable/flutter_bounceable.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
 
 class CategoryItem extends StatelessWidget {
-  final CategoryData categoryData;
+  final EventData eventData;
 
-  const CategoryItem({super.key, required this.categoryData});
+  const CategoryItem({super.key, required this.eventData});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +23,7 @@ class CategoryItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         border: Border.all(color: ColorPallete.primaryColor),
         image: DecorationImage(
-          image: AssetImage(Assets.images.birthdayImg.path),
+          image: AssetImage(eventData.imageUrl),
           fit: BoxFit.cover,
         ),
       ),
@@ -35,7 +40,7 @@ class CategoryItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Text(
-              "21 Nov",
+              DateFormat("dd MMM").format(eventData.selectedDate!),
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: ColorPallete.primaryColor,
@@ -57,7 +62,7 @@ class CategoryItem extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    "Meeting for Updating The Development Method ",
+                    eventData.title,
                     textAlign: TextAlign.start,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: Colors.black,
@@ -67,7 +72,21 @@ class CategoryItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                Icon(Icons.favorite_border, color: ColorPallete.primaryColor),
+                Bounceable(
+                  onTap: () {
+                    eventData.isFavorite = !eventData.isFavorite;
+                    EasyLoading.show();
+                    FirestoreServices.updateEvent(eventData).then((value) {
+                      EasyLoading.dismiss();
+                    });
+                  },
+                  child: Icon(
+                    eventData.isFavorite
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: ColorPallete.primaryColor,
+                  ),
+                ),
               ],
             ),
           ),

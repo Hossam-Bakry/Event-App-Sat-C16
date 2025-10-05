@@ -1,3 +1,4 @@
+import 'package:event_app_c16_sat/core/services/snackbar_service.dart';
 import 'package:event_app_c16_sat/core/theme/color_pallete.dart';
 import 'package:event_app_c16_sat/core/utils/firestore_serivces.dart';
 import 'package:event_app_c16_sat/core/widgets/custom_button_widget.dart';
@@ -8,6 +9,7 @@ import 'package:event_app_c16_sat/models/event_data.dart';
 import 'package:event_app_c16_sat/modules/create_event/widgets/create_tab_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 
 class CreateEventView extends StatefulWidget {
@@ -83,6 +85,7 @@ class _CreateEventViewState extends State<CreateEventView> {
             if (_formKey.currentState!.validate()) {
               if (_selectedDate == null) {
                 /// Toast to inform user to select date
+                SnackBarService.showErrorMessage("Please select event time");
                 return;
               }
               var data = EventData(
@@ -96,7 +99,13 @@ class _CreateEventViewState extends State<CreateEventView> {
               /// Add event to database
               /// Firebase Firestore
 
-              FirestoreServices.addNewEvent(data);
+              EasyLoading.show();
+              FirestoreServices.addNewEvent(data).then((value) {
+                /// function has been done
+                EasyLoading.dismiss();
+                Navigator.pop(context);
+                SnackBarService.showSuccessMessage("Event added successfully");
+              });
             }
           },
           child: Row(
